@@ -1,15 +1,20 @@
+import WebFontFile from "../gameobjects/WebFontFile.js";
+
 export default class HowToPlay extends Phaser.Scene {
     constructor() {
         super({key: "leaderboard"});
+
+    }
+    preload() {
         const wpData = {
-            baseUrl: 'https://elwp.rovn.top' // Replace with your WordPress base URL
+            baseUrl: window.submitDomain
         };
         this.submitScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/submit-score`;
         this.fetchScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/high-scores`;
-    }
-    preload() {
         this.load.image('logo', 'assets/images/logo.png');
+        this.load.image('contact_bg', 'assets/images/contact_bg.png');
         this.load.html('leaderboard', 'assets/text/leaderboard.html');
+        this.load.addFile(new WebFontFile(this.load, 'Poppins'))
     }
 
     create() {
@@ -18,31 +23,14 @@ export default class HowToPlay extends Phaser.Scene {
         this.center_width = this.width / 2;
         this.center_height = this.height / 2;
 
-        this.cameras.main.setBackgroundColor(0x0E141B);
-
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
-        this.add.image(400, 50, 'logo');
+        this.add.image(-30, 50, 'background').setOrigin(0.5, 0.105).setScale('0.8');
+        this.add.image( this.center_width, 70, 'logo').setOrigin(0.5).setScale('0.3');
+        this.add.image( this.center_width, this.height - 220, 'contact_bg').setOrigin(0.5).setScale('0.7');
 
         this.showForm();
 
-        // this.add.text(100, 50, 'High Scores', { fontSize: '32px', color: '#fff' });
-        //
-        // // Create an HTML element to display scores
-        // this.highScoreContainer = document.createElement('div');
-        // this.highScoreContainer.id = 'highScoreContainer';
-        // this.highScoreContainer.style.position = 'absolute';
-        // this.highScoreContainer.style.top = '100px';
-        // this.highScoreContainer.style.left = '100px';
-        // this.highScoreContainer.style.color = 'white';
-        // this.highScoreContainer.style.fontSize = '24px';
-        // document.body.appendChild(this.highScoreContainer);
-
         // Fetch and display the high scores
         this.loadHighScores();
-
-
-
-
 
         this.input.keyboard.on("keydown-SPACE", this.startGame, this);
         this.input.on("pointerdown", (pointer) => this.startGame(), this);
@@ -59,7 +47,7 @@ export default class HowToPlay extends Phaser.Scene {
             // Add each score as a list item
             scores.forEach((score, index) => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${index + 1}. ${score.name}: ${score.score}`;
+                listItem.textContent = `${index + 1}. ${score.name}: ${score.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")}`;
                 scoreList.appendChild(listItem);
             });
         }
@@ -70,12 +58,12 @@ export default class HowToPlay extends Phaser.Scene {
     }
 
     showForm() {
-        this.leaderboardElement = this.add.dom(400, 600).createFromCache('leaderboard');
+        this.leaderboardElement = this.add.dom(this.center_width, this.height - 280).createFromCache('leaderboard');
         this.leaderboardElement.setPerspective(800);
         this.tweens.add({
             targets: this.leaderboardElement,
             y: 250,
-            duration: 3000,
+            duration: 1000,
             ease: 'Power3'
         });
     }
@@ -83,8 +71,7 @@ export default class HowToPlay extends Phaser.Scene {
     async fetchScoresFromWordPress() {
         try {
             const response = await fetch(this.fetchScoreUrl);
-            const scores = await response.json();
-            return scores; // Returns an array of score objects
+            return await response.json(); // Returns an array of score objects
             // return [
             //     {
             //         "name": "Alice",
@@ -109,28 +96,7 @@ export default class HowToPlay extends Phaser.Scene {
             // ];
         } catch (error) {
             console.error('Error fetching scores:', error);
-            return [
-                // {
-                //     "name": "Alice",
-                //     "score": 1500
-                // },
-                // {
-                //     "name": "Bob",
-                //     "score": 1200
-                // },
-                // {
-                //     "name": "Charlie",
-                //     "score": 1000
-                // },
-                // {
-                //     "name": "Dana",
-                //     "score": 800
-                // },
-                // {
-                //     "player": "Eve",
-                //     "score": 700
-                // }
-            ];
+            return [ ];
         }
     }
 

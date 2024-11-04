@@ -3,7 +3,7 @@ class Player extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y, number) {
         // super(scene, x, y, 32, 32, 0x00ff00);
         super(scene, x, y, 'player');
-        this.setOrigin(0.5);
+        this.setOrigin(0.5); // trong tam
         this.setScale(0.5);
         this.scene.add.existing(this);
         this.scene.physics.add.existing(this);
@@ -13,9 +13,8 @@ class Player extends Phaser.GameObjects.Sprite {
         this.health = 10;
         this.body.mass = 10;
         this.body.setDragY = 10;
+        this.body.setSize(x, y);
 
-
-        // this.body.setAllowGravity(false);
         const alpha = 1 / Phaser.Math.Between(1, 3);
         this.init();
     }

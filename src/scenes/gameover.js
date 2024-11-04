@@ -1,16 +1,17 @@
 export default class GameOver extends Phaser.Scene {
     constructor() {
         super({key: "gameover"});
-        const wpData = {
-            baseUrl: 'https://elwp.rovn.top' // Replace with your WordPress base URL
-        };
-        this.submitScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/submit-score`;
-        this.fetchScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/high-scores`;
     }
 
     preload() {
+        const wpData = {
+            baseUrl: window.submitDomain
+        };
+        this.submitScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/submit-score`;
+        this.fetchScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/high-scores`;
+        this.load.image('logo', 'assets/images/logo.png');
+        this.load.image('contact_bg', 'assets/images/contact_bg.png');
         this.load.html('nameform', 'assets/text/form.html');
-        this.load.html('how_to_play', 'assets/text/how-to-play.html');
     }
 
     create() {
@@ -19,35 +20,9 @@ export default class GameOver extends Phaser.Scene {
         this.center_width = this.width / 2;
         this.center_height = this.height / 2;
 
-        this.cameras.main.setBackgroundColor(0x87ceeb);
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
-        this.add
-            .bitmapText(
-                this.center_width,
-                60,
-                "arcade",
-                this.registry.get("score"),
-                25
-            )
-            .setOrigin(0.5);
-        this.add
-            .bitmapText(
-                this.center_width,
-                this.center_height,
-                "arcade",
-                "GAME OVER",
-                45
-            )
-            .setOrigin(0.5);
-        this.add
-            .bitmapText(
-                this.center_width,
-                250,
-                "arcade",
-                "Press SPACE or Click to continue!",
-                15
-            )
-            .setOrigin(0.5);
+        this.add.image(-30, 50, 'background').setOrigin(0.5, 0.105).setScale('0.8');
+        this.add.image( this.center_width, 70, 'logo').setOrigin(0.5).setScale('0.3');
+        this.add.image( this.center_width, this.height - 220, 'contact_bg').setOrigin(0.5).setScale('0.7');
 
         this.showForm();
 
@@ -71,80 +46,35 @@ export default class GameOver extends Phaser.Scene {
 
     showForm() {
         let self = this;
-
-        this.add
-            .bitmapText(
-                this.center_width,
-                25,
-                "arcade",
-                "Your Score",
-                35
-            )
-            .setOrigin(0.5);
-        const text = this.add.text(
-            this.center_width,
-            25,
-            'Your Score',
-            {
-                color: 'white',
-                fontFamily: 'Arial',
-                fontSize: '0 '
-            })
-            .setOrigin(0.5);
-
         const score = this.registry.get("score");
-        const element = this.add.dom(400, 600).createFromCache('nameform');
+        const element = this.add.dom(this.center_width, this.height - 280).createFromCache('nameform');
+        const yourScoreDiv = element.getChildByID('your-score');
+        yourScoreDiv.innerHTML = "<span>" + score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span>";
+        const contactFromDiv = element.getChildByID('contactFrom');
+        const thankyouDiv = element.getChildByID('thank-you');
         element.setPerspective(800);
-
         element.getChildByName('score').value = score;
-
         element.addListener('click');
-
         element.on('click', function (event)
         {
-            if (event.target.name === 'loginButton')
+            if (event.target.name === 'submitButton')
             {
-                const inputUsername = this.getChildByName('username');
+                const inputUsername = this.getChildByName('name');
                 const inputEmail = this.getChildByName('email');
-
-                //  Have they entered anything?
                 if (inputUsername.value !== '' && inputEmail.value !== '')
                 {
                     //  Turn off the click events
                     this.removeListener('click');
-
-                    //  Tween the login form out
-                    this.scene.tweens.add({ targets: element.rotate3d, x: 1, w: 90, duration: 3000, ease: 'Power3' });
-
-                    this.scene.tweens.add({
-                        targets: element, scaleX: 2, scaleY: 2, y: 700, duration: 3000, ease: 'Power3',
-                        onComplete: function ()
-                        {
-                            element.setVisible(false);
-                        }
-                    });
-
                     //  Populate the text with whatever they typed in as the username!
-                    text.setText(`Welcome ${inputUsername.value}`);
-
                     self.submitScore(inputUsername.value, inputEmail.value, score);
+                    contactFromDiv.style.display = 'none';
+                    thankyouDiv.style.display = 'block';
 
-                    self.showLeaderBoard();
-                }
-                else
-                {
-                    //  Flash the prompt
-                    this.scene.tweens.add({ targets: text, alpha: 0.1, duration: 200, ease: 'Power3', yoyo: true });
+                    setTimeout(function() {
+                        self.showLeaderBoard();
+                    }, 1000);
                 }
             }
-
-        });
-
-        this.tweens.add({
-            targets: element,
-            y: 260,
-            duration: 3000,
-            ease: 'Power3'
         });
     }
 

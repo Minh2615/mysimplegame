@@ -4,13 +4,15 @@ import HowToPlay from "./scenes/how_to_play";
 import Game from "./scenes/game";
 import GameOver from "./scenes/gameover";
 import Leaderboard from "./scenes/leaderboard";
+
+window.submitDomain = window.location.origin;
 /*
 This is the main configuration file for the game.
 */
 const config = {
     type: Phaser.AUTO,
     width: 920,
-    height: 510,
+    height: 520,
     scale: {
         mode: Phaser.Scale.FIT,
         autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -20,20 +22,20 @@ const config = {
     physics: {
         default: "arcade",
         arcade: {
-            gravity: {y: 400},
-            debug: true,
+            gravity: {y: 1000},
+            debug: false,
         },
     },
     dom: {
         createContainer: true
     },
-
     loader: {
-        // baseURL: 'https://elwp.rovn.top/wp-content/uploads/ac_assets/game/',
+        // baseURL: window.submitDomain + '/wp-content/uploads/ac_assets/game/',
+        baseURL: window.submitDomain, // + '/wp-content/plugins/runner-game/',
         responseType: "blob",
         crossOrigin: "anonymous",
     },
-    scene: [/*Splash, HowToPlay,*/ Game, GameOver, Leaderboard],
+    scene: [Splash, HowToPlay, Game, GameOver, Leaderboard],
 };
 
 const game = new Phaser.Game(config);

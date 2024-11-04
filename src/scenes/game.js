@@ -1,9 +1,8 @@
 import Player from "../gameobjects/player";
 import Generator from "../gameobjects/generator";
+import WebFontFile from '../gameobjects/WebFontFile'
 
 export default class Game extends Phaser.Scene {
-
-
     constructor() {
         super({key: "game"});
         this.player = null;
@@ -31,26 +30,37 @@ export default class Game extends Phaser.Scene {
             frameWidth: 32,
             frameHeight: 32
         });
-        this.load.spritesheet("pino", "./assets/images/pino.png", {
-            frameWidth: 32,
-            frameHeight: 64,
-        });
+        // this.load.spritesheet("pino", "./assets/images/pino.png", {
+        //     frameWidth: 32,
+        //     frameHeight: 64,
+        // });
         this.load.spritesheet("cloud", "./assets/images/cloud.png", {
             frameWidth: 64,
             frameHeight: 32
         });
-        this.load.spritesheet("star", "./assets/images/star.png", {
-            frameWidth: 65,
-            frameHeight: 75
+        // this.load.spritesheet("star", "./assets/images/star.png", {
+        //     frameWidth: 65,
+        //     frameHeight: 75
+        // });
+
+        this.load.spritesheet("gift-box", "./assets/images/gift-box.png", {
+            frameWidth: 60,
+            frameHeight: 54
         });
+        this.load.spritesheet("music-note01", "./assets/images/music-note01.png", {
+            frameWidth: 60,
+            frameHeight: 54
+        });
+        this.load.spritesheet("music-note02", "./assets/images/music-note02.png", {
+            frameWidth: 30,
+            frameHeight: 54
+        });
+
         this.load.spritesheet("player", "./assets/images/player.png", {
             frameWidth: 400,
             frameHeight: 267,
         });
-        this.load.spritesheet("tree", "./assets/images/tree.png", {
-            frameWidth: 60,
-            frameHeight: 95,
-        });
+
         this.load.bitmapFont(
             "arcade",
             "assets/fonts/arcade.png",
@@ -61,6 +71,8 @@ export default class Game extends Phaser.Scene {
 
 
         this.score = 0;
+
+        this.load.addFile(new WebFontFile(this.load, 'Poppins'))
     }
 
     /*
@@ -92,12 +104,34 @@ export default class Game extends Phaser.Scene {
         this.SPACE = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
-        this.player = new Player(this, this.center_width - 250, this.height - 200);
-        this.scoreText = this.add.bitmapText(
-            this.center_width,
-            10,
-            "arcade",
+        this.player = new Player(this, this.center_width - 300, this.height - 200);
+        // this.scoreText = this.add.bitmapText(
+        //     this.center_width,
+        //     10,
+        //     "arcade",
+        //     this.score,
+        //     22
+        // );
+
+        this.graphics = this.add.graphics();
+        this.graphics.fillStyle(0x235f5a, 1);
+        //  10px radius on the corners
+        this.graphics.fillRoundedRect(this.width - 120, 25, 100, 40, 10);
+        this.graphics.lineStyle(2, 0x379b5f, 1);
+        //  10px radius on the corners
+        this.graphics.strokeRoundedRect(this.width - 120, 24, 100, 40, 10);
+
+        this.scoreText = this.add.text(
+            this.width - 120,
+            35,
             this.score,
+            {
+                fontFamily: 'Poppins, Georgia, Times, serif',
+                color: '#fff',
+                fixedWidth: 100,
+                fixedHeight: 0,
+                align: "center"
+            },
             20
         );
 
@@ -180,8 +214,8 @@ export default class Game extends Phaser.Scene {
     This method is specific to the music. We use it to play the theme music in a loop.
     */
     playMusic(theme = "theme") {
-        this.theme = this.sound.add(theme);
-        this.theme.stop();
+        // this.theme = this.sound.add(theme);
+        // this.theme.stop();
         // this.theme.play({
         //     mute: false,
         //     volume: 1,
@@ -202,10 +236,6 @@ export default class Game extends Phaser.Scene {
         this.bg.tilePositionX += 3;
         if (Phaser.Input.Keyboard.JustDown(this.SPACE)) {
             this.jump();
-        } else if (this.player.body.blocked.down) {
-            this.jumpTween?.stop();
-            this.player.rotation = 0;
-            // ground
         }
     }
 
@@ -216,18 +246,11 @@ export default class Game extends Phaser.Scene {
     */
     jump() {
         if (!this.player.body.blocked.down) return;
-        this.player.body.setVelocityY(-300)
+        this.player.body.setVelocityY(-600)
             // .setAcceleration(1,1)
-            // .setGravity(1,1)
+            .setGravity(0,250)
         ;
-
         this.playAudio("jump");
-        // this.jumpTween = this.tweens.add({
-        //     targets: this.player,
-        //     duration: 1000,
-        //     angle: {from: 0, to: 360},
-        //     repeat: -1,
-        // });
     }
 
     /*
@@ -237,10 +260,9 @@ export default class Game extends Phaser.Scene {
     - Play the dead sound
     - Set the score in the registry to show it in the `gameover` scene.
     - Start the `gameover` scene.
-
     */
     finishScene() {
-        this.theme.stop();
+        // this.theme.stop();
         this.playAudio("dead");
         this.registry.set("score", "" + this.score);
         this.scene.start("gameover");
@@ -251,6 +273,6 @@ export default class Game extends Phaser.Scene {
     */
     updateScore(points = 1) {
         this.score += points;
-        this.scoreText.setText(this.score);
+        this.scoreText.setText(this.score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ","));
     }
 }

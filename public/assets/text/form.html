@@ -1,93 +1,107 @@
 <style>
-    .login {
-        background: #eceeee;
-        border: 1px solid #42464b;
-        border-radius: 6px;
-        height: 300px;
-        margin: 20px auto 0;
-        width: 400px;
+    .contact_form {
+        height: 200px;
+        margin: 0 auto 0;
+        width: 600px;
     }
-    .login h1 {
-        background-image: linear-gradient(top, #f1f3f3, #d4dae0);
-        /*border-bottom: 1px solid #a6abaf;*/
-        border-radius: 6px 6px 0 0;
+
+    .contact_form h1 {
         box-sizing: border-box;
-        color: #727678;
+        color: #fff;
         display: block;
         height: 43px;
-        font: 600 16px/1 'Open Sans', sans-serif;
-        /*line-height: 45px;*/
-        padding-top: 14px;
+        font: 700 38px/1 'Poppins', 'Open Sans', sans-serif;
+        margin: 10px 0;
+        text-align: center;
+    }
+
+    .contact_form h4 {
+        box-sizing: border-box;
+        color: #fff;
+        display: block;
+        height: 30px;
+        font: 400 20px/1 'Poppins', 'Open Sans', sans-serif;
         margin: 0;
         text-align: center;
-        text-shadow: 0 -1px 0 rgba(0,0,0,0.2), 0 1px 0 #fff;
     }
+
     input[type="email"], input[type="text"] {
-        background: linear-gradient(top, #d6d7d7, #dee0e0);
-        border: 1px solid #a1a3a3;
-        border-radius: 4px;
-        box-shadow: 0 1px #fff;
+        background: transparent;
+        border: none;
+        border-bottom: 1px solid #fff;
         box-sizing: border-box;
-        color: #696969;
+        color: #fff;
         height: 39px;
-        margin: 31px 0 0 29px;
-        padding-left: 25px;
-        transition: box-shadow 0.3s;
-        width: 350px;
+        margin: 30px 0 0 15px;
+        padding-left: 0;
+        width: 250px;
     }
+
     input[type="email"]:focus, input[type="text"]:focus {
-        box-shadow: 0 0 4px 1px rgba(55, 166, 155, 0.3);
         outline: 0;
     }
 
     input[type="submit"] {
-        width:240px;
-        height:35px;
-        display:block;
-        font-family:Arial, "Helvetica", sans-serif;
-        font-size:16px;
-        font-weight:bold;
-        color:#fff;
-        text-decoration:none;
-        text-transform:uppercase;
-        text-align:center;
-        text-shadow:1px 1px 0px #37a69b;
-        padding-top:6px;
-        /*margin: 29px 0 0 29px;*/
+        width: 145px;
+        height: 35px;
+        display: block;
+        font-family: 'Poppins', Arial, "Helvetica", sans-serif;
+        font-size: 16px;
+        color: #c35051;
+        text-decoration: none;
+        text-align: center;
         margin: 29px auto;
-        position:relative;
-        cursor:pointer;
+        position: relative;
+        cursor: pointer;
         border: none;
-        background-color: #C35151;
-        background-image: linear-gradient(top,#3db0a6,#3111);
-        border-top-left-radius: 5px;
-        border-top-right-radius: 5px;
-        border-bottom-right-radius: 5px;
-        border-bottom-left-radius:5px;
-        box-shadow: inset 0px 1px 0px #2ab7ec, 0px 5px 0px 0px #C35151, 0px 10px 5px #999;
+        background-color: #fff;
+        border-radius: 50px;
     }
 
-    .shadow {
-        background: #000;
-        border-radius: 12px 12px 4px 4px;
-        box-shadow: 0 0 20px 10px #000;
-        height: 12px;
-        margin: 30px auto;
-        opacity: 0.2;
-        width: 270px;
+    input::placeholder {
+        color: #fff;
+        font: 400 16px/1.2 'Poppins', 'Open Sans', sans-serif;
+    }
+
+    .contact_form p {
+        color: #fff;
+        font: 400 16px/1.2 'Poppins', 'Open Sans', sans-serif;
+        margin: 0;
+        text-align: left;
+        padding: 0 15px;
     }
 
     input[type="submit"]:active {
-        top:3px;
-        box-shadow: inset 0px 1px 0px #2ab7ec, 0px 2px 0px 0px #31524d, 0px 5px 3px #999;
+        top: 3px;
+    }
+
+    #your-score {
+        margin: 0 auto 15px;
+        color: #fff;
+        padding: 6px 20px;
+        text-align: center;
+        background: #235f5a;
+        border: 2px solid #379b5f;
+        border-radius: 12px;
+        width: 160px;
+        font: 400 18px/1.2 'Poppins', 'Open Sans', sans-serif;
+    }
+    #thank-you {
+        display: none;
+        margin: 20px 0;
     }
 </style>
 
-<div class="login">
-    <h1 class="form-header">Enter your name and email to save your score on the leaderboard and see show you rank!</h1>
-    <input type="hidden" placeholder="Score" id="score" name="score">
-    <input type="text" placeholder="Username" id="username" name="username">
-    <input type="email" placeholder="Email Address" id="email" name="email">
-    <input type="submit" value="Submit" name="loginButton">
+<div class="contact_form">
+    <h1>Congratulations!</h1>
+    <h4>Your Score</h4>
+    <div id="your-score"><span>1,170</span></div>
+    <div id="contactFrom">
+        <p class="form-header">Enter your name and email to save your score on the leaderboard and see how you rank!</p>
+        <input type="hidden" placeholder="Score" id="score" name="score">
+        <input type="text" placeholder="Name" id="username" name="name">
+        <input type="email" placeholder="Email Address" id="email" name="email">
+        <input type="submit" value="Submit" name="submitButton">
+    </div>
+    <h4 id="thank-you">Thank you for your time.</h4>
 </div>
-<div class="shadow"></div>

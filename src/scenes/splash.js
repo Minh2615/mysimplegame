@@ -1,3 +1,5 @@
+import WebFontFile from "../gameobjects/WebFontFile.js";
+
 export default class Splash extends Phaser.Scene {
     constructor() {
         super({key: "splash"});
@@ -9,9 +11,10 @@ export default class Splash extends Phaser.Scene {
             // responseType: "blob",
             // crossOrigin: 'anonymous',
         });
-        this.load.image('background', 'assets/images/background.jpg', {
+        this.load.image('background', 'assets/images/background.png', {
             // responseType: "blob"
         });
+        this.load.addFile(new WebFontFile(this.load, 'Poppins'))
     }
 
     create() {
@@ -22,12 +25,10 @@ export default class Splash extends Phaser.Scene {
 
         this.cameras.main.setBackgroundColor(0x0E141B);
 
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
-        this.add.image(400, 100, 'logo');
+        this.add.image(-30, 50, 'background').setOrigin(0.5, 0.105).setScale('0.8');
+        this.add.image( this.center_width, this.center_height - 20, 'logo').setOrigin(0.5).setScale('0.8');
 
         this.showTitle();
-        // this.time.delayedCall(1000, () => this.showInstructions(), null, this);
-
         this.input.keyboard.on("keydown-SPACE", this.startGame, this);
         this.input.on("pointerdown", (pointer) => this.startGame(), this);
     }
@@ -37,76 +38,28 @@ export default class Splash extends Phaser.Scene {
     }
 
     showTitle() {
-        // this.add
-        //     .bitmapText(
-        //         this.center_width,
-        //         50,
-        //         "arcade",
-        //         this.registry.get("score"),
-        //         25
-        //     )
-        //     .setOrigin(0.5);
-        // this.add
-        //     .bitmapText(
-        //         this.center_width,
-        //         this.center_height,
-        //         "arcade",
-        //         "GAME Start",
-        //         45
-        //     )
-        //     .setOrigin(0.5);
+        this.width = this.sys.game.config.width;
+        this.height = this.sys.game.config.height;
+        this.center_width = this.width / 2;
+        this.center_height = this.height / 2;
 
-        this.add.text(
-            this.center_width,
-            this.center_height,
-            "GAME START",
+        this.graphics = this.add.graphics();
+        this.graphics.fillStyle(0xc35051, 1);
+        //  10px radius on the corners
+        this.graphics.fillRoundedRect(this.center_width - 120, this.center_height + 150, 240, 40, 20);
+
+        this.scoreText = this.add.text(
+            this.center_width - 50,
+            this.center_height + 160,
+            'Start Game',
             {
-                color: 'white',
-                fontFamily: 'Arial',
-                fontSize: '32px '
-            })
-            .setOrigin(0.5);
-
-        this.add.text(
-            this.center_width,
-            this.center_height + 75,
-            "Press SPACE or Click to continue!",
-            {
-                color: 'white',
-                fontFamily: 'Arial',
-                fontSize: '18px '
-            })
-            .setOrigin(0.5);
-
-        // this.add
-        //     .bitmapText(
-        //         this.center_width,
-        //         250,
-        //         "arcade",
-        //         "Press SPACE or Click to continue!",
-        //         15
-        //     )
-        //     .setOrigin(0.5);
-    }
-    showInstructions() {
-        this.add
-            .bitmapText(this.center_width, 450, "pico", "WASD/Arrows", 40) .setTint(0x6b140b)
-            .setOrigin(0.5)
-            .setDropShadow(0, 3, 0x6b302a, 0.9);
-        this.add
-            .sprite(this.center_width - 140, 355, "pello") .setOrigin(0.5)
-            .setScale(0.5);
-        this.add
-            .bitmapText(this.center_width + 60, 350, "pico", "By PELLO", 35) .setTint(0x6b140b)
-            .setOrigin(0.5)
-            .setDropShadow(0, 3, 0x6b302a, 0.9);
-        this.space = this.add
-            .bitmapText(this.center_width, 520, "pico", "SPACE start", 30) .setTint(0x6b140b)
-            .setOrigin(0.5)
-            .setDropShadow(0, 2, 0x6b302a, 0.9);
-        this.tweens.add({
-            targets: this.space, duration: 300,
-            alpha: { from: 0, to: 1 }, repeat: -1,
-            yoyo: true, });
+                fontFamily: 'Poppins, Georgia, Times, serif',
+                color: '#fff',
+                fixedWidth: 100,
+                fixedHeight: 0,
+                align: "center"
+            },
+            22
+        );
     }
 }

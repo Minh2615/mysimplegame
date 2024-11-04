@@ -1,10 +1,14 @@
+import WebFontFile from "../gameobjects/WebFontFile.js";
+
 export default class HowToPlay extends Phaser.Scene {
     constructor() {
         super({key: "how_to_play"});
     }
     preload() {
         this.load.image('logo', 'assets/images/logo.png');
+        this.load.image('how_to_play_bg', 'assets/images/how_to_play_bg.png');
         this.load.html('how_to_play', 'assets/text/how-to-play.html');
+        this.load.addFile(new WebFontFile(this.load, 'Poppins'))
     }
 
     create() {
@@ -15,10 +19,30 @@ export default class HowToPlay extends Phaser.Scene {
 
         this.cameras.main.setBackgroundColor(0x0E141B);
 
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
-        this.add.image(400, 50, 'logo');
+        this.add.image(-30, 50, 'background').setOrigin(0.5, 0.105).setScale('0.8');
+        this.add.image( this.center_width, 70, 'logo').setOrigin(0.5).setScale('0.3');
+        this.add.image( this.center_width, this.height - 220, 'how_to_play_bg').setOrigin(0.5).setScale('0.7');
 
         this.showForm();
+
+        this.graphics = this.add.graphics();
+        this.graphics.fillStyle(0xffffff, 1);
+        //  10px radius on the corners
+        this.graphics.fillRoundedRect(this.center_width - 120, this.center_height + 150, 240, 40, 20);
+
+        this.scoreText = this.add.text(
+            this.center_width - 50,
+            this.center_height + 160,
+            "Let's Start",
+            {
+                fontFamily: 'Poppins, Georgia, Times, serif',
+                color: '#c35051',
+                fixedWidth: 100,
+                fixedHeight: 0,
+                align: "center"
+            },
+            22
+        );
 
         this.input.keyboard.on("keydown-SPACE", this.startGame, this);
         this.input.on("pointerdown", (pointer) => this.startGame(), this);
@@ -29,14 +53,6 @@ export default class HowToPlay extends Phaser.Scene {
     }
 
     showForm() {
-        const element = this.add.dom(400, 600).createFromCache('how_to_play');
-        element.setPerspective(800);
-        this.tweens.add({
-            targets: element,
-            y: 250,
-            duration: 3000,
-            ease: 'Power3'
-        });
+        const element = this.add.dom(this.center_width, this.height - 220).createFromCache('how_to_play');
     }
-
 }

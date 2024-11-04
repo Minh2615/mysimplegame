@@ -6,9 +6,10 @@ export default class Generator {
     }
 
     init() {
-        this.generateCloud();
+        // this.generateCloud();
         this.generateObstacle();
         this.generateCoin();
+        this.generateCoin2();
     }
 
     /*
@@ -31,7 +32,7 @@ export default class Generator {
             new Obstacle(
                 this.scene,
                 800,
-                this.scene.height - 1000 // 32 // Phaser.Math.Between(0, 64)
+                this.scene.height - Phaser.Math.Between(32, 64)
             )
         );
         this.scene.time.delayedCall(
@@ -47,12 +48,30 @@ export default class Generator {
             new Coin(
                 this.scene,
                 800,
-                this.scene.height - Phaser.Math.Between(32, 128)
+                this.scene.height - Phaser.Math.Between(64, 250),
+                'music-note01'
             )
         );
         this.scene.time.delayedCall(
-            Phaser.Math.Between(500, 1500),
+            Phaser.Math.Between(3000, 5000),
             () => this.generateCoin(1),
+            null,
+            this
+        );
+    }
+
+    generateCoin2() {
+        this.scene.coins.add(
+            new Coin(
+                this.scene,
+                800,
+                this.scene.height - Phaser.Math.Between(32, 180),
+                'music-note02'
+            )
+        );
+        this.scene.time.delayedCall(
+            Phaser.Math.Between(800, 2000),
+            () => this.generateCoin2(1),
             null,
             this
         );
@@ -77,7 +96,7 @@ class Cloud extends Phaser.GameObjects.Sprite {
     init() {
         this.scene.tweens.add({
             targets: this,
-            x: {from: 800, to: -100},
+            x: {from: 800, to: 0},
             duration: 2000 / this.scale,
             onComplete: () => {
                 this.destroy();
@@ -92,7 +111,7 @@ This is a game object that represents an obstacle. It works exactly like the clo
 class Obstacle extends Phaser.GameObjects.Sprite {
     constructor(scene, x, y) {
         // super(scene, x, y, 32, 32, 0xff0000);
-        super(scene, x, y, 'pino');
+        super(scene, x, y, 'gift-box');
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.setAllowGravity(false);
@@ -104,7 +123,7 @@ class Obstacle extends Phaser.GameObjects.Sprite {
     init() {
         this.scene.tweens.add({
             targets: this,
-            x: {from: 820, to: -100},
+            x: {from: 1000, to: 0},
             duration: 2000,
             onComplete: () => {
                 this.destroy();
@@ -119,20 +138,21 @@ This is a game object that represents a coin. It's an animated sprite that is pa
 It can increase the player's score if it touches it.
 */
 class Coin extends Phaser.GameObjects.Sprite {
-    constructor(scene, x, y) {
-        super(scene, x, y, "star");
+    constructor(scene, x, y, texture_name) {
+        super(scene, x, y, texture_name);
         scene.add.existing(this);
         scene.physics.add.existing(this);
         this.body.setAllowGravity(false);
         const alpha = 1 / Phaser.Math.Between(1, 3);
-        this.setScale(0.7);
+        this.setOrigin(0.5);
+        this.setScale(1);
         this.init();
     }
 
     init() {
         this.scene.tweens.add({
             targets: this,
-            x: {from: 820, to: -100},
+            x: {from: 1000, to: 0},
             duration: 2000,
             onComplete: () => {
                 this.destroy();

@@ -1,15 +1,23 @@
 export default class Generator {
     constructor(scene) {
         this.scene = scene;
-        this.scene.time.delayedCall(2000, () => this.init(), null, this);
+        this.scene.time.delayedCall(1000, () => this.init(), null, this);
         this.pinos = 0;
     }
 
     init() {
+        const self = this;
         // this.generateCloud();
         this.generateObstacle();
-        this.generateCoin();
-        this.generateCoin2();
+        setTimeout(function() {
+            self.generateCoin();
+        }, 200);
+        setTimeout(function() {
+            self.generateCoin2();
+        }, 600);
+        setTimeout(function() {
+            self.generateCoin3();
+        }, 1500);
     }
 
     /*
@@ -48,7 +56,7 @@ export default class Generator {
             new Coin(
                 this.scene,
                 800,
-                this.scene.height - Phaser.Math.Between(64, 250),
+                this.scene.height - Phaser.Math.Between(50, 300),
                 'music-note01'
             )
         );
@@ -65,13 +73,30 @@ export default class Generator {
             new Coin(
                 this.scene,
                 800,
-                this.scene.height - Phaser.Math.Between(32, 180),
+                this.scene.height - Phaser.Math.Between(60, 200),
                 'music-note02'
             )
         );
         this.scene.time.delayedCall(
             Phaser.Math.Between(800, 2000),
             () => this.generateCoin2(1),
+            null,
+            this
+        );
+    }
+
+    generateCoin3() {
+        this.scene.coins.add(
+            new Coin(
+                this.scene,
+                800,
+                this.scene.height - Phaser.Math.Between(70, 300),
+                'music-note03'
+            )
+        );
+        this.scene.time.delayedCall(
+            Phaser.Math.Between(5000, 10000),
+            () => this.generateCoin3(1),
             null,
             this
         );

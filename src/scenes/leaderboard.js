@@ -12,7 +12,7 @@ export default class HowToPlay extends Phaser.Scene {
         this.submitScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/submit-score`;
         this.fetchScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/high-scores`;
         this.load.image('logo', 'assets/images/logo.png');
-        this.load.image('contact_bg', 'assets/images/contact_bg.png');
+        this.load.image('contact_bg', 'assets/images/contact_bg.jpg');
         this.load.html('leaderboard', 'assets/text/leaderboard.html');
         this.load.addFile(new WebFontFile(this.load, 'Poppins'))
     }
@@ -81,18 +81,6 @@ export default class HowToPlay extends Phaser.Scene {
             //         "name": "Bob",
             //         "score": 1200
             //     },
-            //     {
-            //         "name": "Charlie",
-            //         "score": 1000
-            //     },
-            //     {
-            //         "name": "Dana",
-            //         "score": 800
-            //     },
-            //     {
-            //         "name": "Eve",
-            //         "score": 700
-            //     }
             // ];
         } catch (error) {
             console.error('Error fetching scores:', error);

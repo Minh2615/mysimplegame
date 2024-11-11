@@ -5,7 +5,12 @@ import Game from "./scenes/game";
 import GameOver from "./scenes/gameover";
 import Leaderboard from "./scenes/leaderboard";
 
+// window.submitDomain = 'https://elwp.rovn.top';
 window.submitDomain = window.location.origin;
+window.submitDomain = window.location.origin + '/wp';
+window.assetsDomain = window.submitDomain + '/wp-content/plugins/runner-game';
+window.leaderboardUrl = window.submitDomain + '/leaderboard';
+
 /*
 This is the main configuration file for the game.
 */
@@ -30,12 +35,10 @@ const config = {
         createContainer: true
     },
     loader: {
-        // baseURL: window.submitDomain + '/wp-content/uploads/ac_assets/game/',
-        baseURL: window.submitDomain, // + '/wp-content/plugins/runner-game/',
-        responseType: "blob",
-        crossOrigin: "anonymous",
+        baseURL: window.assetsDomain,
+        imageLoadType: "HTMLImageElement"
     },
-    scene: [Splash, HowToPlay, Game, GameOver, Leaderboard],
+    scene: [Splash, HowToPlay, Game, GameOver],
 };
 
 const game = new Phaser.Game(config);

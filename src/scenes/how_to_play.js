@@ -25,27 +25,27 @@ export default class HowToPlay extends Phaser.Scene {
 
         this.showForm();
 
-        this.graphics = this.add.graphics();
-        this.graphics.fillStyle(0xffffff, 1);
+        // this.graphics = this.add.graphics();
+        // this.graphics.fillStyle(0xffffff, 1);
         //  10px radius on the corners
-        this.graphics.fillRoundedRect(this.center_width - 120, this.center_height + 150, 240, 40, 20);
+        // this.graphics.fillRoundedRect(this.center_width - 110, this.center_height + 170, 220, 30, 15);
+        //
+        // this.scoreText = this.add.text(
+        //     this.center_width - 50,
+        //     this.center_height + 176,
+        //     "Let’s Sleigh",
+        //     {
+        //         fontFamily: 'Poppins, Georgia, Times, serif',
+        //         color: '#c35051',
+        //         fixedWidth: 100,
+        //         fixedHeight: 0,
+        //         align: "center"
+        //     },
+        //     16
+        // );
 
-        this.scoreText = this.add.text(
-            this.center_width - 50,
-            this.center_height + 160,
-            "Let's Start",
-            {
-                fontFamily: 'Poppins, Georgia, Times, serif',
-                color: '#c35051',
-                fixedWidth: 100,
-                fixedHeight: 0,
-                align: "center"
-            },
-            22
-        );
-
-        this.input.keyboard.on("keydown-SPACE", this.startGame, this);
-        this.input.on("pointerdown", (pointer) => this.startGame(), this);
+        // this.input.keyboard.on("keydown-SPACE", this.startGame, this);
+        // this.input.on("pointerdown", (pointer) => this.startGame(), this);
     }
 
     startGame() {
@@ -53,6 +53,18 @@ export default class HowToPlay extends Phaser.Scene {
     }
 
     showForm() {
-        const element = this.add.dom(this.center_width, this.height - 220).createFromCache('how_to_play');
+        let self = this;
+        const element = this.add.dom(this.center_width, this.height - 275).createFromCache('how_to_play');
+
+        element.addListener('click');
+        element.on('click', function (event) {
+            const inputAgree = element.getChildByID('agreeInput');
+            if (event.target.name === 'submitButton')
+            {
+                if (inputAgree.checked === true) {
+                    self.startGame();
+                }
+            }
+        })
     }
 }

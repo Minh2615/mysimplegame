@@ -1,10 +1,10 @@
 {
-  "name": "runner",
-  "productName": "Runner",
+  "name": "santa_single_dash",
+  "productName": "Santa's Single Dash",
   "main": "index.html",
   "type": "module",
   "window": {
-    "title": "Runner",
+    "title": "Santa's Single Dash",
     "width": 800,
     "height": 600,
     "fullscreen": false,
@@ -12,7 +12,7 @@
     "icon": "customIcon.png"
   },
   "version": "0.0.1",
-  "description": "Game for Phaser by Example",
+  "description": "Santa's Single Dash",
   "repository": {
     "url": "https://github.com"
   },

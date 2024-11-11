@@ -25,7 +25,7 @@ export default class Game extends Phaser.Scene {
         this.load.audio("coin", "assets/sounds/coin.mp3");
         this.load.audio("jump", "assets/sounds/jump.mp3");
         this.load.audio("dead", "assets/sounds/dead.mp3");
-        this.load.audio("theme", "assets/sounds/theme.mp3");
+        // this.load.audio("theme", "assets/sounds/theme.mp3");
         this.load.spritesheet("coin", "./assets/images/coin.png", {
             frameWidth: 32,
             frameHeight: 32
@@ -34,10 +34,10 @@ export default class Game extends Phaser.Scene {
         //     frameWidth: 32,
         //     frameHeight: 64,
         // });
-        this.load.spritesheet("cloud", "./assets/images/cloud.png", {
-            frameWidth: 64,
-            frameHeight: 32
-        });
+        // this.load.spritesheet("cloud", "./assets/images/cloud.png", {
+        //     frameWidth: 64,
+        //     frameHeight: 32
+        // });
         // this.load.spritesheet("star", "./assets/images/star.png", {
         //     frameWidth: 65,
         //     frameHeight: 75
@@ -55,20 +55,23 @@ export default class Game extends Phaser.Scene {
             frameWidth: 30,
             frameHeight: 54
         });
+        this.load.spritesheet("music-note03", "./assets/images/music-note03.png", {
+            frameWidth: 30,
+            frameHeight: 54
+        });
 
         this.load.spritesheet("player", "./assets/images/player.png", {
             frameWidth: 400,
             frameHeight: 267,
         });
 
-        this.load.bitmapFont(
-            "arcade",
-            "assets/fonts/arcade.png",
-            "assets/fonts/arcade.xml"
-        );
+        // this.load.bitmapFont(
+        //     "arcade",
+        //     "assets/fonts/arcade.png",
+        //     "assets/fonts/arcade.xml"
+        // );
 
-        this.load.image('background', 'assets/images/background.png');
-
+        this.load.image('background', './assets/images/scene_game.png');
 
         this.score = 0;
 
@@ -92,7 +95,7 @@ export default class Game extends Phaser.Scene {
         this.center_height = this.height / 2;
 
         // this.cameras.main.setBackgroundColor(0x0E141B);
-        this.add.image(0, 0, 'background').setOrigin(0, 0);
+        // this.add.image(0, 0, 'background').setOrigin(0, 0);
 
         this.bg = this.add.tileSprite(0, 0, this.width, this.height, 'background')
             .setScale(1)
@@ -104,7 +107,7 @@ export default class Game extends Phaser.Scene {
         this.SPACE = this.input.keyboard.addKey(
             Phaser.Input.Keyboard.KeyCodes.SPACE
         );
-        this.player = new Player(this, this.center_width - 300, this.height - 200);
+        this.player = new Player(this, this.center_width - 240, this.height - 200);
         // this.scoreText = this.add.bitmapText(
         //     this.center_width,
         //     10,
@@ -156,12 +159,13 @@ export default class Game extends Phaser.Scene {
         );
 
         this.loadAudios();
-        this.playMusic();
+        // this.playMusic();
 
         /*
         We use the `pointerdown` event to listen to the mouse click or touch event.
         */
         this.input.on("pointerdown", (pointer) => this.jump(), this);
+        this.input.keyboard.on("keydown-SPACE", () => this.jump(), this);
 
         /*
         We use `updateScoreEvent` to update the score every 100ms so the player can see the score increasing as long as he survives.
@@ -214,17 +218,17 @@ export default class Game extends Phaser.Scene {
     This method is specific to the music. We use it to play the theme music in a loop.
     */
     playMusic(theme = "theme") {
-        // this.theme = this.sound.add(theme);
-        // this.theme.stop();
-        // this.theme.play({
-        //     mute: false,
-        //     volume: 1,
-        //     rate: 1,
-        //     detune: 0,
-        //     seek: 0,
-        //     loop: true,
-        //     delay: 0,
-        // });
+        this.theme = this.sound.add(theme);
+        this.theme.stop();
+        this.theme.play({
+            mute: false,
+            volume: 1,
+            rate: 1,
+            detune: 0,
+            seek: 0,
+            loop: true,
+            delay: 0,
+        });
     }
 
     /*

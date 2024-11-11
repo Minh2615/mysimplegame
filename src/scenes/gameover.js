@@ -10,7 +10,7 @@ export default class GameOver extends Phaser.Scene {
         this.submitScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/submit-score`;
         this.fetchScoreUrl = `${wpData.baseUrl}/wp-json/jumpgame/v1/high-scores`;
         this.load.image('logo', 'assets/images/logo.png');
-        this.load.image('contact_bg', 'assets/images/contact_bg.png');
+        this.load.image('contact_bg', 'assets/images/contact_bg.jpg');
         this.load.html('nameform', 'assets/text/form.html');
     }
 
@@ -25,7 +25,6 @@ export default class GameOver extends Phaser.Scene {
         this.add.image( this.center_width, this.height - 220, 'contact_bg').setOrigin(0.5).setScale('0.7');
 
         this.showForm();
-
         // this.input.keyboard.on("keydown-SPACE", this.startGame, this);
         // this.input.on("pointerdown", (pointer) => this.startGame(), this);
     }
@@ -47,10 +46,11 @@ export default class GameOver extends Phaser.Scene {
     showForm() {
         let self = this;
         const score = this.registry.get("score");
-        const element = this.add.dom(this.center_width, this.height - 280).createFromCache('nameform');
+        const element = this.add.dom(this.center_width, this.height - 275).createFromCache('nameform');
         const yourScoreDiv = element.getChildByID('your-score');
         yourScoreDiv.innerHTML = "<span>" + score.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "</span>";
-        const contactFromDiv = element.getChildByID('contactFrom');
+        const formHeaderText = element.getChildByID('form-header-text');
+        const submitButtonInput = element.getChildByID('submitButton');
         const thankyouDiv = element.getChildByID('thank-you');
         element.setPerspective(800);
         element.getChildByName('score').value = score;
@@ -61,33 +61,44 @@ export default class GameOver extends Phaser.Scene {
             {
                 const inputUsername = this.getChildByName('name');
                 const inputEmail = this.getChildByName('email');
-                if (inputUsername.value !== '' && inputEmail.value !== '')
+                if (inputUsername.value !== '')
                 {
                     //  Turn off the click events
-                    this.removeListener('click');
+                    // this.removeListener('click');
                     //  Populate the text with whatever they typed in as the username!
                     self.submitScore(inputUsername.value, inputEmail.value, score);
-                    contactFromDiv.style.display = 'none';
+                    submitButtonInput.style.display = 'none';
+                    inputUsername.style.display = 'none';
+                    inputEmail.style.display = 'none';
+                    formHeaderText.style.display = 'none';
                     thankyouDiv.style.display = 'block';
 
                     setTimeout(function() {
                         self.showLeaderBoard();
                     }, 1000);
+
                 }
+            }
+            if (event.target.name === 'playAgainButton')
+            {
+                this.removeListener('click');
+                self.showStartScene();
             }
         });
     }
-
     showLeaderBoard() {
-        this.scene.start("leaderboard");
+        window.location.replace(window.leaderboardUrl);
+    }
+    showStartScene() {
+        this.scene.start("splash");
     }
 
-    async submitScore(playerName, playerEmail, score) {
+    async submitScore(playerName, email, score) {
         try {
             const response = await fetch(this.submitScoreUrl, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ name: playerName, email: playerEmail, score: score })
+                body: JSON.stringify({ name: playerName, email: email, score: score })
             });
 
             const result = await response.json();

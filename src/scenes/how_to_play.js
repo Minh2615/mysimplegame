@@ -7,7 +7,7 @@ export default class HowToPlay extends Phaser.Scene {
     preload() {
         this.load.image('logo', 'assets/images/logo.png');
         this.load.image('how_to_play_bg', 'assets/images/how_to_play_bg.png');
-        // this.load.html('how_to_play', 'assets/text/how-to-play.html');
+        this.load.html('how_to_play', 'assets/text/how-to-play.html');
         this.load.addFile(new WebFontFile(this.load, 'Poppins'))
     }
 
@@ -54,39 +54,17 @@ export default class HowToPlay extends Phaser.Scene {
 
     showForm() {
         let self = this;
-        // const element = this.add.dom(this.center_width, this.height - 275).createFromCache('how_to_play');
-        const container = this.add.dom(this.center_width, this.height - 275).createElement('div');
+        const element = this.add.dom(this.center_width, this.height - 275).createFromCache('how_to_play');
 
-
-        fetch('assets/text/how-to-play.php')
-            .then(response => response.text())
-            .then(html => {
-                container.setHTML(html); // Đặt nội dung HTML vào container
-
-                // Thêm sự kiện click cho nút submit
-                container.addListener('click');
-                container.on('click', function (event) {
-                    const inputAgree = container.getChildByID('agreeInput');
-                    if (event.target.name === 'submitButton') {
-                        if (inputAgree && inputAgree.checked === true) {
-                            self.startGame();
-                        }
-                    }
-                });
-            })
-            .catch(error => {
-                console.error('Lỗi khi tải nội dung từ PHP:', error);
-            });
-
-        // element.addListener('click');
-        // element.on('click', function (event) {
-        //     const inputAgree = element.getChildByID('agreeInput');
-        //     if (event.target.name === 'submitButton')
-        //     {
-        //         if (inputAgree.checked === true) {
-        //             self.startGame();
-        //         }
-        //     }
-        // })
+        element.addListener('click');
+        element.on('click', function (event) {
+            const inputAgree = element.getChildByID('agreeInput');
+            if (event.target.name === 'submitButton')
+            {
+                if (inputAgree.checked === true) {
+                    self.startGame();
+                }
+            }
+        })
     }
 }
